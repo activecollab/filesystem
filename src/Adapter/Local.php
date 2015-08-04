@@ -500,6 +500,6 @@
      */
     private function withSlash($path)
     {
-      return substr($path, strlen($path) - 1) ? $path : $path . '/';
+      return substr($path, strlen($path) - 1) == '/' ? $path : $path . '/';
     }
   }
