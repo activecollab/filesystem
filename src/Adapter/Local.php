@@ -62,6 +62,8 @@
           }
         }
 
+        sort($files);
+
         return $files;
       } else {
         throw new InvalidArgumentException('$path is not a directory');
@@ -131,6 +133,8 @@
             $subdirs[$k] = mb_substr($path, $this->sandbox_path_length);
           }
         }
+
+        sort($subdirs);
 
         return $subdirs;
       } else {
