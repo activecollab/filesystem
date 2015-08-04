@@ -1,1 +1,3 @@
-# filesystem
+# Filesystem
+
+Simple filesystem abstraction.
