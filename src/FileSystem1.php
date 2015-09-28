@@ -1,36 +1,37 @@
 <?php
-  namespace ActiveCollab\Filesystem;
 
-  use ActiveCollab\Filesystem\Adapter\Adapter;
+namespace ActiveCollab\Filesystem;
 
-  /**
-   * @package ActiveCollab\Filesystem
-   */
-  class Filesystem implements Adapter
-  {
+use ActiveCollab\Filesystem\Adapter\AdapterInterface;
+
+/**
+ * @package ActiveCollab\Filesystem
+ */
+class Filesystem implements AdapterInterface
+{
     /**
-     * @var \ActiveCollab\Filesystem\Adapter\Adapter
+     * @var \ActiveCollab\Filesystem\Adapter\AdapterInterface
      */
     private $adapter;
 
     /**
      * Constructor
      *
-     * @param Adapter $adapter
+     * @param AdapterInterface $adapter
      */
-    public function __construct(Adapter $adapter)
+    public function __construct(AdapterInterface $adapter)
     {
-      $this->adapter = $adapter;
+        $this->adapter = $adapter;
     }
 
     /**
      * Return user Adapter instance
      *
-     * @return \ActiveCollab\Filesystem\Adapter\Adapter
+     * @return \ActiveCollab\Filesystem\Adapter\AdapterInterface
      */
     public function &getAdapter()
     {
-      return $this->adapter;
+        return $this->adapter;
     }
 
     /**
@@ -42,7 +43,7 @@
      */
     function files($path = '/', $include_hidden = true)
     {
-      return $this->adapter->files($path, $include_hidden);
+        return $this->adapter->files($path, $include_hidden);
     }
 
     /**
@@ -53,7 +54,7 @@
      */
     public function subdirs($path = '/')
     {
-      return $this->adapter->subdirs($path);
+        return $this->adapter->subdirs($path);
     }
 
     /**
@@ -66,7 +67,7 @@
      */
     public function link($source, $target)
     {
-      $this->adapter->link($source, $target);
+        $this->adapter->link($source, $target);
     }
 
     /**
@@ -78,7 +79,7 @@
      */
     public function createFile($path, $data, $mode = null)
     {
-      $this->adapter->createFile($path, $data, $mode);
+        $this->adapter->createFile($path, $data, $mode);
     }
 
     /**
@@ -90,7 +91,7 @@
      */
     public function writeFile($path, $data, $mode = null)
     {
-      $this->adapter->writeFile($path, $data, $mode);
+        $this->adapter->writeFile($path, $data, $mode);
     }
 
     /**
@@ -101,7 +102,7 @@
      */
     public function replaceInFile($path, array $search_and_replace)
     {
-      $this->adapter->replaceInFile($path, $search_and_replace);
+        $this->adapter->replaceInFile($path, $search_and_replace);
     }
 
     /**
@@ -115,7 +116,7 @@
      */
     public function copyFile($source, $target, $mode = null)
     {
-      $this->adapter->copyFile($source, $target, $mode);
+        $this->adapter->copyFile($source, $target, $mode);
     }
 
     /**
@@ -128,7 +129,7 @@
      */
     public function createDir($path, $mode = 0777, $recursive = true)
     {
-      return $this->adapter->createDir($path, $mode, $recursive);
+        return $this->adapter->createDir($path, $mode, $recursive);
     }
 
     /**
@@ -142,7 +143,7 @@
      */
     public function copyDir($source, $target, $empty_target = false)
     {
-      $this->adapter->copyDir($source, $target, $empty_target);
+        $this->adapter->copyDir($source, $target, $empty_target);
     }
 
     /**
@@ -153,7 +154,7 @@
      */
     public function emptyDir($path = '/', array $exclude = [])
     {
-      $this->adapter->emptyDir($path, $exclude);
+        $this->adapter->emptyDir($path, $exclude);
     }
 
     /**
@@ -163,7 +164,7 @@
      */
     public function delete($path = '/')
     {
-      return $this->adapter->delete($path);
+        return $this->adapter->delete($path);
     }
 
     /**
@@ -173,7 +174,7 @@
      */
     public function deleteDir($path = '/')
     {
-      $this->adapter->deleteDir($path);
+        $this->adapter->deleteDir($path);
     }
 
     /**
@@ -184,6 +185,6 @@
      */
     public function getFullPath($path = '/')
     {
-      return $this->adapter->getFullPath($path);
+        return $this->adapter->getFullPath($path);
     }
-  }
+}

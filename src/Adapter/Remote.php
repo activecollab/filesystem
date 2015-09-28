@@ -1,8 +1,11 @@
 <?php
 
-  namespace ActiveCollab\Filesystem\Adapter;
+namespace ActiveCollab\Filesystem\Adapter;
 
-  class Remote implements Adapter
-  {
-
-  }
+/**
+ * @package ActiveCollab\Filesystem\Adapter
+ * @todo
+ */
+class Remote implements AdapterInterface
+{
+}

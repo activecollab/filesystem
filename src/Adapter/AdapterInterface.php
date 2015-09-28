@@ -1,12 +1,12 @@
 <?php
 
-  namespace ActiveCollab\Filesystem\Adapter;
+namespace ActiveCollab\Filesystem\Adapter;
 
-  /**
-   * @package ActiveCollab\Filesystem\Adapter
-   */
-  interface Adapter
-  {
+/**
+ * @package ActiveCollab\Filesystem\Adapter
+ */
+interface AdapterInterface
+{
     /**
      * List all files that are in the given path
      *
@@ -121,4 +121,4 @@
      * @return string
      */
     public function getFullPath($path = '/');
-  }
+}
