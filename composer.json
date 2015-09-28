@@ -2,6 +2,7 @@
   "name" : "activecollab/filesystem",
   "type": "library",
   "description": "Work with local or remote Unix filesystem",
+  "license" : "MIT",
   "prefer-stable": true,
   "keywords": [ "filesystem", "activecollab" ],
   "homepage": "https://labs.activecollab.com",
@@ -12,7 +13,7 @@
     }
   ],
   "require" : {
-    "php": ">=5.4.0"
+    "php": ">=5.5.0"
   },
   "require-dev" : {
     "phpunit/phpunit": "~4.7"
