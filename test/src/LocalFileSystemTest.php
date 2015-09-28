@@ -47,7 +47,7 @@ class LocalFilesystemTest extends TestCase
         /** @var \ActiveCollab\FileSystem\Adapter\LocalAdapter $adapter */
         $adapter = $this->filesystem->getAdapter();
 
-        $this->assertInstanceOf('\ActiveCollab\FileSystem\Adapter\Local', $adapter);
+        $this->assertInstanceOf('\ActiveCollab\FileSystem\Adapter\LocalAdapter', $adapter);
         $this->assertEquals(__DIR__ . '/sandbox/', $adapter->getSandboxPath());
     }
 
