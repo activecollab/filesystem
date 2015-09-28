@@ -8,7 +8,7 @@ use RuntimeException;
 /**
  * @package ActiveCollab\FileSystem\Adapter
  */
-class Local implements AdapterInterface
+class LocalAdapter implements AdapterInterface
 {
     /**
      * @var string

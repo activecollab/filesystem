@@ -4,7 +4,7 @@ namespace ActiveCollab\FileSystem\Test;
 
 use ActiveCollab\FileSystem\FileSystemInterface;
 use ActiveCollab\FileSystem\FileSystem;
-use ActiveCollab\FileSystem\Adapter\Local;
+use ActiveCollab\FileSystem\Adapter\LocalAdapter;
 use InvalidArgumentException;
 
 /**
@@ -24,7 +24,7 @@ class LocalFilesystemTest extends TestCase
     {
         parent::setUp();
 
-        $this->filesystem = new FileSystem(new Local(__DIR__ . '/sandbox'));
+        $this->filesystem = new FileSystem(new LocalAdapter(__DIR__ . '/sandbox'));
     }
 
     /**
@@ -44,7 +44,7 @@ class LocalFilesystemTest extends TestCase
      */
     public function testAdapterIsLocal()
     {
-        /** @var \ActiveCollab\FileSystem\Adapter\Local $adapter */
+        /** @var \ActiveCollab\FileSystem\Adapter\LocalAdapter $adapter */
         $adapter = $this->filesystem->getAdapter();
 
         $this->assertInstanceOf('\ActiveCollab\FileSystem\Adapter\Local', $adapter);
