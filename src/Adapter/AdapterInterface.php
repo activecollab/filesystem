@@ -1,9 +1,9 @@
 <?php
 
-namespace ActiveCollab\Filesystem\Adapter;
+namespace ActiveCollab\FileSystem\Adapter;
 
 /**
- * @package ActiveCollab\Filesystem\Adapter
+ * @package ActiveCollab\FileSystem\Adapter
  */
 interface AdapterInterface
 {

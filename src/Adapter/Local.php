@@ -1,14 +1,12 @@
 <?php
 
-namespace ActiveCollab\Filesystem\Adapter;
+namespace ActiveCollab\FileSystem\Adapter;
 
-
-use InvalidArgumentException, RuntimeException;
-
-require_once __DIR__ . '/Adapter.php';
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
- * @package ActiveCollab\Filesystem\Adapter
+ * @package ActiveCollab\FileSystem\Adapter
  */
 class Local implements AdapterInterface
 {

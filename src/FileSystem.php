@@ -1,16 +1,16 @@
 <?php
 
-namespace ActiveCollab\Filesystem;
+namespace ActiveCollab\FileSystem;
 
-use ActiveCollab\Filesystem\Adapter\AdapterInterface;
+use ActiveCollab\FileSystem\Adapter\AdapterInterface;
 
 /**
  * @package ActiveCollab\Filesystem
  */
-class Filesystem implements AdapterInterface
+class FileSystem implements FileSystemInterface, AdapterInterface
 {
     /**
-     * @var \ActiveCollab\Filesystem\Adapter\AdapterInterface
+     * @var \ActiveCollab\FileSystem\Adapter\AdapterInterface
      */
     private $adapter;
 
@@ -27,7 +27,7 @@ class Filesystem implements AdapterInterface
     /**
      * Return user Adapter instance
      *
-     * @return \ActiveCollab\Filesystem\Adapter\AdapterInterface
+     * @return \ActiveCollab\FileSystem\Adapter\AdapterInterface
      */
     public function &getAdapter()
     {

@@ -1,18 +1,18 @@
 <?php
 
-  namespace ActiveCollab\Filesystem\Test;
+namespace ActiveCollab\FileSystem\Test;
 
-  use ActiveCollab\Filesystem\Filesystem;
-  use ActiveCollab\Filesystem\Adapter\Local;
-  use InvalidArgumentException;
+use ActiveCollab\FileSystem\FilesystemInterface;
+use ActiveCollab\FileSystem;
+use InvalidArgumentException;
 
-  /**
-   * Class LocalFilesystemTest
-   */
-  class LocalFilesystemTest extends TestCase
-  {
+/**
+ * Class LocalFilesystemTest
+ */
+class LocalFilesystemTest extends TestCase
+{
     /**
-     * @var Filesystem
+     * @var FileSystemInterface
      */
     private $filesystem;
 
@@ -21,9 +21,9 @@
      */
     public function setUp()
     {
-      parent::setUp();
+        parent::setUp();
 
-      $this->filesystem = new Filesystem(new Local(__DIR__ . '/sandbox'));
+        $this->filesystem = new FileSystem(new Local(__DIR__ . '/sandbox'));
     }
 
     /**
@@ -31,11 +31,11 @@
      */
     public function tearDown()
     {
-      $this->filesystem->emptyDir('/', [ '.gitignore' ]);
+        $this->filesystem->emptyDir('/', ['.gitignore']);
 
-      $this->assertEquals([], $this->filesystem->subdirs());
+        $this->assertEquals([], $this->filesystem->subdirs());
 
-      parent::tearDown();
+        parent::tearDown();
     }
 
     /**
@@ -43,11 +43,11 @@
      */
     public function testAdapterIsLocal()
     {
-      /** @var \ActiveCollab\Filesystem\Adapter\Local $adapter */
-      $adapter = $this->filesystem->getAdapter();
+        /** @var \ActiveCollab\FileSystem\Adapter\Local $adapter */
+        $adapter = $this->filesystem->getAdapter();
 
-      $this->assertInstanceOf('\ActiveCollab\Filesystem\Adapter\Local', $adapter);
-      $this->assertEquals(__DIR__ . '/sandbox/', $adapter->getSandboxPath());
+        $this->assertInstanceOf('\ActiveCollab\FileSystem\Adapter\Local', $adapter);
+        $this->assertEquals(__DIR__ . '/sandbox/', $adapter->getSandboxPath());
     }
 
     /**
@@ -55,8 +55,8 @@
      */
     public function testFullPath()
     {
-      $this->assertEquals(__DIR__ . '/sandbox/.gitignore', $this->filesystem->getFullPath('.gitignore'));
-      $this->assertEquals(__DIR__ . '/sandbox/.gitignore', $this->filesystem->getFullPath('/.gitignore'));
+        $this->assertEquals(__DIR__ . '/sandbox/.gitignore', $this->filesystem->getFullPath('.gitignore'));
+        $this->assertEquals(__DIR__ . '/sandbox/.gitignore', $this->filesystem->getFullPath('/.gitignore'));
     }
 
     /**
@@ -64,7 +64,7 @@
      */
     public function testFullPathThrowsAnExceptionWhenPathIsOutsideOfTheSandbox()
     {
-      $this->filesystem->getFullPath('../../password-file');
+        $this->filesystem->getFullPath('../../password-file');
     }
 
     /**
@@ -72,7 +72,7 @@
      */
     public function testSubdirsThrowAnExceptionOnFilePath()
     {
-      $this->filesystem->subdirs('.gitignore');
+        $this->filesystem->subdirs('.gitignore');
     }
 
     /**
@@ -80,21 +80,21 @@
      */
     public function testSubdirsThrowAnExceptionMissingDir()
     {
-      $this->filesystem->subdirs('this-directory-does-not-exist');
+        $this->filesystem->subdirs('this-directory-does-not-exist');
     }
 
     public function testFiles()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory1', 0777);
+        mkdir(__DIR__ . '/sandbox/subdirectory1', 0777);
 
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/file1.txt', '123');
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/file2.txt', '456');
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/.file3.txt', '789');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/file1.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/file2.txt', '456');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/.file3.txt', '789');
 
-      $this->assertEquals([ '.gitignore' ], $this->filesystem->files());
-      $this->assertEquals([], $this->filesystem->files('/', false));
-      $this->assertEquals([ 'subdirectory1/.file3.txt', 'subdirectory1/file1.txt', 'subdirectory1/file2.txt' ], $this->filesystem->files('subdirectory1'));
-      $this->assertEquals([ 'subdirectory1/file1.txt', 'subdirectory1/file2.txt' ], $this->filesystem->files('subdirectory1', false));
+        $this->assertEquals(['.gitignore'], $this->filesystem->files());
+        $this->assertEquals([], $this->filesystem->files('/', false));
+        $this->assertEquals(['subdirectory1/.file3.txt', 'subdirectory1/file1.txt', 'subdirectory1/file2.txt'], $this->filesystem->files('subdirectory1'));
+        $this->assertEquals(['subdirectory1/file1.txt', 'subdirectory1/file2.txt'], $this->filesystem->files('subdirectory1', false));
     }
 
     /**
@@ -102,13 +102,13 @@
      */
     public function testSubdirs()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
-      mkdir(__DIR__ . '/sandbox/subdirectory2');
-      mkdir(__DIR__ . '/sandbox/.hidden');
+        mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
+        mkdir(__DIR__ . '/sandbox/subdirectory2');
+        mkdir(__DIR__ . '/sandbox/.hidden');
 
-      $this->assertEquals([ '.hidden', 'subdirectory1', 'subdirectory2' ], $this->filesystem->subdirs());
-      $this->assertEquals([ 'subdirectory1/subsubdirectory1' ], $this->filesystem->subdirs('subdirectory1'));
-      $this->assertEquals([], $this->filesystem->subdirs('subdirectory2'));
+        $this->assertEquals(['.hidden', 'subdirectory1', 'subdirectory2'], $this->filesystem->subdirs());
+        $this->assertEquals(['subdirectory1/subsubdirectory1'], $this->filesystem->subdirs('subdirectory1'));
+        $this->assertEquals([], $this->filesystem->subdirs('subdirectory2'));
     }
 
     /**
@@ -116,11 +116,11 @@
      */
     public function testDeleteAFile()
     {
-      file_put_contents(__DIR__ . '/sandbox/a-file.txt', '123');
-      $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
+        file_put_contents(__DIR__ . '/sandbox/a-file.txt', '123');
+        $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
 
-      $this->filesystem->delete('a-file.txt');
-      $this->assertFileNotExists(__DIR__ . '/sandbox/a-file.txt');
+        $this->filesystem->delete('a-file.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/a-file.txt');
     }
 
     /**
@@ -128,19 +128,19 @@
      */
     public function testDeleteALinkToAFile()
     {
-      file_put_contents(__DIR__ . '/sandbox/a-file.txt', '123');
-      $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
+        file_put_contents(__DIR__ . '/sandbox/a-file.txt', '123');
+        $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
 
-      symlink(__DIR__ . '/sandbox/a-file.txt', __DIR__ . '/sandbox/a-new-file.txt');
+        symlink(__DIR__ . '/sandbox/a-file.txt', __DIR__ . '/sandbox/a-new-file.txt');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/a-new-file.txt');
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/a-new-file.txt'));
-      $this->assertEquals(__DIR__ . '/sandbox/a-file.txt', readlink(__DIR__ . '/sandbox/a-new-file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/a-new-file.txt');
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/a-new-file.txt'));
+        $this->assertEquals(__DIR__ . '/sandbox/a-file.txt', readlink(__DIR__ . '/sandbox/a-new-file.txt'));
 
-      $this->filesystem->delete('a-new-file.txt');
+        $this->filesystem->delete('a-new-file.txt');
 
-      $this->assertFileNotExists(__DIR__ . '/sandbox/a-new-file.txt');
-      $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/a-new-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
     }
 
     /**
@@ -148,23 +148,23 @@
      */
     public function testDeleteExceptionWhenTryingToDeleteANonExistingFile()
     {
-      $this->filesystem->deleteDir('file-that-does-not-exist.txt');
+        $this->filesystem->deleteDir('file-that-does-not-exist.txt');
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testDeleteExceptionWhenDirIsLinked() 
+    public function testDeleteExceptionWhenDirIsLinked()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory2');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
+        mkdir(__DIR__ . '/sandbox/subdirectory2');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
 
-      symlink(__DIR__ . '/sandbox/subdirectory2', __DIR__ . '/sandbox/subdirectory3');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory3');
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/subdirectory3'));
-      $this->assertEquals(__DIR__ . '/sandbox/subdirectory2', readlink(__DIR__ . '/sandbox/subdirectory3'));
+        symlink(__DIR__ . '/sandbox/subdirectory2', __DIR__ . '/sandbox/subdirectory3');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory3');
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/subdirectory3'));
+        $this->assertEquals(__DIR__ . '/sandbox/subdirectory2', readlink(__DIR__ . '/sandbox/subdirectory3'));
 
-      $this->filesystem->delete('subdirectory3');
+        $this->filesystem->delete('subdirectory3');
     }
 
     /**
@@ -172,10 +172,10 @@
      */
     public function testDeleteExceptionWhenTrygingToDeleteADir()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory2');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
+        mkdir(__DIR__ . '/sandbox/subdirectory2');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
 
-      $this->filesystem->delete('subdirectory2');
+        $this->filesystem->delete('subdirectory2');
     }
 
     /**
@@ -183,10 +183,10 @@
      */
     public function testCreateFile()
     {
-      $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
-      $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
-      $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-created.txt'));
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-created.txt'));
     }
 
     /**
@@ -194,10 +194,10 @@
      */
     public function testCreateFileExceptionOnExistingFile()
     {
-      $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
-      $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
-      $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->filesystem->createFile('file-to-be-created.txt', 'File content', 0777);
     }
 
     /**
@@ -205,11 +205,11 @@
      */
     public function testWriteFileCreatesAMissingFile()
     {
-      $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
 
-      $this->filesystem->writeFile('file-to-be-created.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
-      $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-created.txt'));
+        $this->filesystem->writeFile('file-to-be-created.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-created.txt'));
     }
 
     /**
@@ -217,15 +217,15 @@
      */
     public function testWriteFileUpdatesAnExistingFile()
     {
-      $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
 
-      $this->filesystem->createFile('file-to-be-updated.txt', 'One!', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
-      $this->assertEquals('One!', file_get_contents(__DIR__ . '/sandbox/file-to-be-updated.txt'));
+        $this->filesystem->createFile('file-to-be-updated.txt', 'One!', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
+        $this->assertEquals('One!', file_get_contents(__DIR__ . '/sandbox/file-to-be-updated.txt'));
 
-      $this->filesystem->writeFile('file-to-be-updated.txt', 'Two!', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
-      $this->assertEquals('Two!', file_get_contents(__DIR__ . '/sandbox/file-to-be-updated.txt'));
+        $this->filesystem->writeFile('file-to-be-updated.txt', 'Two!', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-updated.txt');
+        $this->assertEquals('Two!', file_get_contents(__DIR__ . '/sandbox/file-to-be-updated.txt'));
     }
 
     /**
@@ -233,15 +233,15 @@
      */
     public function testReplaceInFile()
     {
-      $this->filesystem->createFile('file.txt', 'One!', 0777);
+        $this->filesystem->createFile('file.txt', 'One!', 0777);
 
-      $this->assertFileExists(__DIR__ . '/sandbox/file.txt');
-      $this->assertEquals('One!', file_get_contents(__DIR__ . '/sandbox/file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/file.txt');
+        $this->assertEquals('One!', file_get_contents(__DIR__ . '/sandbox/file.txt'));
 
-      $this->filesystem->replaceInFile('file.txt', [ 'One' => 'Two' ]);
+        $this->filesystem->replaceInFile('file.txt', ['One' => 'Two']);
 
-      $this->assertFileExists(__DIR__ . '/sandbox/file.txt');
-      $this->assertEquals('Two!', file_get_contents(__DIR__ . '/sandbox/file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/file.txt');
+        $this->assertEquals('Two!', file_get_contents(__DIR__ . '/sandbox/file.txt'));
     }
 
     /**
@@ -249,15 +249,15 @@
      */
     public function testCopyFile()
     {
-      $this->filesystem->createFile('file-to-be-copied.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-copied.txt');
-      $this->filesystem->copyFile($this->filesystem->getFullPath('file-to-be-copied.txt'), 'file-copy.txt', 0777);
+        $this->filesystem->createFile('file-to-be-copied.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-copied.txt');
+        $this->filesystem->copyFile($this->filesystem->getFullPath('file-to-be-copied.txt'), 'file-copy.txt', 0777);
 
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-copied.txt');
-      $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-copied.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-copied.txt');
+        $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-to-be-copied.txt'));
 
-      $this->assertFileExists(__DIR__ . '/sandbox/file-copy.txt');
-      $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-copy.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/file-copy.txt');
+        $this->assertEquals('File content', file_get_contents(__DIR__ . '/sandbox/file-copy.txt'));
     }
 
     /**
@@ -265,14 +265,14 @@
      */
     public function testLinkFile()
     {
-      $this->filesystem->createFile('file-to-be-linked.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-linked.txt');
+        $this->filesystem->createFile('file-to-be-linked.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-linked.txt');
 
-      $this->filesystem->link($this->filesystem->getFullPath('file-to-be-linked.txt'), 'linked-file.txt');
+        $this->filesystem->link($this->filesystem->getFullPath('file-to-be-linked.txt'), 'linked-file.txt');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/linked-file.txt');
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/linked-file.txt'));
-      $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/linked-file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/linked-file.txt');
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/linked-file.txt'));
+        $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/linked-file.txt'));
     }
 
     /**
@@ -280,9 +280,9 @@
      */
     public function testCreateDir()
     {
-      $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1');
-      $this->filesystem->createDir('subdirectory1/subsubdirectory1');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1');
+        $this->filesystem->createDir('subdirectory1/subsubdirectory1');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1');
     }
 
     /**
@@ -290,41 +290,41 @@
      */
     public function testCopyDir()
     {
-      $this->filesystem->createFile('file-to-be-linked.txt', 'File content', 0777);
-      $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-linked.txt');
+        $this->filesystem->createFile('file-to-be-linked.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-linked.txt');
 
-      $this->filesystem->createDir('dir-to-be-copied');
-      $this->filesystem->createDir('dir-to-be-copied/subfolder');
+        $this->filesystem->createDir('dir-to-be-copied');
+        $this->filesystem->createDir('dir-to-be-copied/subfolder');
 
-      $this->filesystem->createFile('dir-to-be-copied/file.txt', 'File #1', 0777);
-      $this->filesystem->createFile('dir-to-be-copied/subfolder/file.txt', 'File #2', 0777);
+        $this->filesystem->createFile('dir-to-be-copied/file.txt', 'File #1', 0777);
+        $this->filesystem->createFile('dir-to-be-copied/subfolder/file.txt', 'File #2', 0777);
 
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/file.txt');
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/subfolder/file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/subfolder/file.txt');
 
-      $this->filesystem->link($this->filesystem->getFullPath('file-to-be-linked.txt'), 'dir-to-be-copied/linked-file.txt');
+        $this->filesystem->link($this->filesystem->getFullPath('file-to-be-linked.txt'), 'dir-to-be-copied/linked-file.txt');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt');
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt'));
-      $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt');
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt'));
+        $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/dir-to-be-copied/linked-file.txt'));
 
-      $this->filesystem->copyDir($this->filesystem->getFullPath('dir-to-be-copied'), 'dir-copy');
+        $this->filesystem->copyDir($this->filesystem->getFullPath('dir-to-be-copied'), 'dir-copy');
 
-      // Folders
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-copy');
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/subfolder');
+        // Folders
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-copy');
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/subfolder');
 
-      // Files
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/file.txt');
-      $this->assertEquals('File #1', file_get_contents(__DIR__ . '/sandbox/dir-copy/file.txt'));
+        // Files
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/file.txt');
+        $this->assertEquals('File #1', file_get_contents(__DIR__ . '/sandbox/dir-copy/file.txt'));
 
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/subfolder/file.txt');
-      $this->assertEquals('File #2', file_get_contents(__DIR__ . '/sandbox/dir-copy/subfolder/file.txt'));
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/subfolder/file.txt');
+        $this->assertEquals('File #2', file_get_contents(__DIR__ . '/sandbox/dir-copy/subfolder/file.txt'));
 
-      // Link
-      $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/linked-file.txt');
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/dir-copy/linked-file.txt'));
-      $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/dir-copy/linked-file.txt'));
+        // Link
+        $this->assertFileExists(__DIR__ . '/sandbox/dir-copy/linked-file.txt');
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/dir-copy/linked-file.txt'));
+        $this->assertEquals(__DIR__ . '/sandbox/file-to-be-linked.txt', readlink(__DIR__ . '/sandbox/dir-copy/linked-file.txt'));
     }
 
     /**
@@ -332,30 +332,30 @@
      */
     public function testEmptyDir()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
-      mkdir(__DIR__ . '/sandbox/subdirectory2');
-      mkdir(__DIR__ . '/sandbox/.hidden');
+        mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
+        mkdir(__DIR__ . '/sandbox/subdirectory2');
+        mkdir(__DIR__ . '/sandbox/.hidden');
 
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt', '123');
-      file_put_contents(__DIR__ . '/sandbox/.hidden/a-file-2.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/.hidden/a-file-2.txt', '123');
 
-      symlink(__FILE__, __DIR__ . '/sandbox/.hidden/' . basename(__FILE__));
+        symlink(__FILE__, __DIR__ . '/sandbox/.hidden/' . basename(__FILE__));
 
-      $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
-      $this->assertFileExists(__DIR__ . '/sandbox/.hidden');
+        $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory2');
+        $this->assertFileExists(__DIR__ . '/sandbox/.hidden');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__));
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__)));
-      $this->assertEquals(__FILE__, readlink(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__)));
+        $this->assertFileExists(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__));
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__)));
+        $this->assertEquals(__FILE__, readlink(__DIR__ . '/sandbox/.hidden/' . basename(__FILE__)));
 
-      $this->filesystem->emptyDir('/', [ '.gitignore' ]);
+        $this->filesystem->emptyDir('/', ['.gitignore']);
 
-      $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
-      $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
-      $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory2');
-      $this->assertFileNotExists(__DIR__ . '/sandbox/.hidden');
+        $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory2');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/.hidden');
     }
 
     /**
@@ -363,26 +363,26 @@
      */
     public function testDeleteDir()
     {
-      mkdir(__DIR__ . '/sandbox/subdirectory1/folder', 0777, true);
-      mkdir(__DIR__ . '/sandbox/subdirectory1/.hidden');
+        mkdir(__DIR__ . '/sandbox/subdirectory1/folder', 0777, true);
+        mkdir(__DIR__ . '/sandbox/subdirectory1/.hidden');
 
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/folder/a-file.txt', '123');
-      file_put_contents(__DIR__ . '/sandbox/subdirectory1/.hidden/a-file-2.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/folder/a-file.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/.hidden/a-file-2.txt', '123');
 
-      symlink(__FILE__, __DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__));
+        symlink(__FILE__, __DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__));
 
-      $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
+        $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/folder/a-file.txt');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/.hidden/a-file-2.txt');
-      $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__));
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/folder/a-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/.hidden/a-file-2.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__));
 
-      $this->assertTrue(is_link(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__)));
-      $this->assertEquals(__FILE__, readlink(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__)));
+        $this->assertTrue(is_link(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__)));
+        $this->assertEquals(__FILE__, readlink(__DIR__ . '/sandbox/subdirectory1/.hidden/' . basename(__FILE__)));
 
-      $this->filesystem->deleteDir('subdirectory1');
+        $this->filesystem->deleteDir('subdirectory1');
 
-      $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
-      $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1');
+        $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1');
     }
-  }
+}

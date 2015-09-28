@@ -1,9 +1,9 @@
 <?php
-  namespace ActiveCollab\Filesystem\Test;
+namespace ActiveCollab\FileSystem\Test;
 
-  /**
-   * @package ActiveCollab\Memories\Test
-   */
-  abstract class TestCase extends \PHPUnit_Framework_TestCase
-  {
-  }
+/**
+ * @package ActiveCollab\Memories\Test
+ */
+abstract class TestCase extends \PHPUnit_Framework_TestCase
+{
+}
