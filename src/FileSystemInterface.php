@@ -5,7 +5,7 @@ namespace ActiveCollab\FileSystem;
 /**
  * @package ActiveCollab\FileSystem
  */
-interface FilesystemInterface
+interface FileSystemInterface
 {
     /**
      * Return user Adapter instance

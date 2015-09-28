@@ -2,7 +2,7 @@
 
 namespace ActiveCollab\FileSystem\Test;
 
-use ActiveCollab\FileSystem\FilesystemInterface;
+use ActiveCollab\FileSystem\FileSystemInterface;
 use ActiveCollab\FileSystem\FileSystem;
 use ActiveCollab\FileSystem\Adapter\Local;
 use InvalidArgumentException;
