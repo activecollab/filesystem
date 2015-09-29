@@ -8,35 +8,16 @@ use RuntimeException;
 /**
  * @package ActiveCollab\FileSystem\Adapter
  */
-class LocalAdapter implements AdapterInterface
+class LocalAdapter extends Adapter
 {
     /**
-     * @var string
-     */
-    private $sandbox_path;
-
-    /**
-     * @var integer
-     */
-    private $sandbox_path_length;
-
-    /**
-     * @param string $sandbox_path
+     * Construct a new instance of local file system
+     *
+     * @param string|null $sandbox_path
      */
     public function __construct($sandbox_path)
     {
-        $this->sandbox_path = $this->withSlash($sandbox_path);
-        $this->sandbox_path_length = mb_strlen($this->sandbox_path);
-    }
-
-    /**
-     * Return sandbox path
-     *
-     * @return string
-     */
-    public function getSandboxPath()
-    {
-        return $this->sandbox_path;
+        $this->setSandboxPath($sandbox_path);
     }
 
     /**
@@ -56,7 +37,7 @@ class LocalAdapter implements AdapterInterface
 
             if (count($files)) {
                 foreach ($files as $k => $path) {
-                    $files[ $k ] = mb_substr($path, $this->sandbox_path_length);
+                    $files[ $k ] = mb_substr($path, $this->getSandboxPathLength());
                 }
             }
 
@@ -131,7 +112,7 @@ class LocalAdapter implements AdapterInterface
 
             if (count($subdirs)) {
                 foreach ($subdirs as $k => $path) {
-                    $subdirs[ $k ] = mb_substr($path, $this->sandbox_path_length);
+                    $subdirs[ $k ] = mb_substr($path, $this->getSandboxPathLength());
                 }
             }
 
@@ -478,42 +459,5 @@ class LocalAdapter implements AdapterInterface
         if ($delete_self) {
             rmdir($dir);
         }
-    }
-
-    /**
-     * Convert relative path to full path
-     *
-     * @param  string $path
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public function getFullPath($path = '/')
-    {
-        if (mb_substr($path, 0, 1) == '/') {
-            $path = mb_substr($path, 1);
-        }
-
-        $full_path = $this->sandbox_path . $path;
-
-        if (strpos($full_path, '..')) {
-            $full_path = realpath($full_path);
-
-            if (mb_substr($full_path, 0, $this->sandbox_path_length) != $this->sandbox_path) {
-                throw new InvalidArgumentException('$path is outside of the sanbox path');
-            }
-        }
-
-        return $full_path;
-    }
-
-    /**
-     * Return path with trailing slash
-     *
-     * @param  string $path
-     * @return string
-     */
-    private function withSlash($path)
-    {
-        return substr($path, strlen($path) - 1) == '/' ? $path : $path . '/';
     }
 }
