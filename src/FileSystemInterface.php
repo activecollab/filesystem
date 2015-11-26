@@ -128,4 +128,26 @@ interface FileSystemInterface
      * @return string
      */
     public function getFullPath($path = '/');
+
+    /**
+     * Attempts to change the mode of the specified file to that given in mode.
+     * @param string $path
+     * @param int $mode
+     * @param boolean $recursive
+     */
+    public function changePermissions($path,  $mode = 0777, $recursive = false);
+
+    /**
+     * Returns TRUE if the filename exists and is a directory, FALSE otherwise.
+     * @param string $path
+     * @return boolean
+     */
+    public function isDir($path = '/');
+
+    /**
+     * Tells whether the given file is a regular file.
+     * @param string $path
+     * @return boolean
+     */
+    public function isFile($path = '/');
 }

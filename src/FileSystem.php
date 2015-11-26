@@ -187,4 +187,28 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     {
         return $this->adapter->getFullPath($path);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function changePermissions($path, $mode = 0777, $recursive = false)
+    {
+        return $this->adapter->changePermissions($path, $mode, $recursive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDir($path = '/')
+    {
+        return $this->adapter->isDir($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFile($path = '/')
+    {
+        return $this->adapter->isFile($path);
+    }
 }

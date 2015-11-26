@@ -460,4 +460,45 @@ class LocalAdapter extends Adapter
             rmdir($dir);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function changePermissions($path, $mode = 0777, $recursive = false)
+    {
+        $dirs = [];
+        $path = $this->getFullPath($path);
+        if ($recursive) {
+            $dirs = $this->subdirsWithFullPaths($path, true);
+        }
+        $dirs[] = $path;
+        foreach ($dirs as $dir) {
+            if (!chmod($dir, $mode)) {
+                throw new RuntimeException(sprintf('Unable to change directory permission. Directory path: %s ; Permission mode: %s',
+                    $dir,
+                    $mode
+                ));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDir($path = '/')
+    {
+        $path = $this->getFullPath($path);
+        //echo $path;
+        return is_dir($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFile($path = '/')
+    {
+        $path = $this->getFullPath($path);
+        return is_file($path);
+    }
 }

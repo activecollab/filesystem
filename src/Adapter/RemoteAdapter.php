@@ -164,4 +164,25 @@ class RemoteAdapter extends Adapter
     public function getFullPath($path = '/')
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function changePermissions($path, $mode = 0777, $recursive = false)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDir($path = '/')
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFile($path = '/')
+    {
+    }
 }
