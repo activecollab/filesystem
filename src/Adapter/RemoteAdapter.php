@@ -168,7 +168,7 @@ class RemoteAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
-    public function changePermissions($path, $mode = 0777, $recursive = false)
+    public function changePermissions($path, $mode = 0777)
     {
     }
 
@@ -185,4 +185,13 @@ class RemoteAdapter extends Adapter
     public function isFile($path = '/')
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLink($path = '/')
+    {
+    }
+
+
 }

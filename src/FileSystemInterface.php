@@ -133,9 +133,8 @@ interface FileSystemInterface
      * Attempts to change the mode of the specified file to that given in mode.
      * @param string $path
      * @param int $mode
-     * @param boolean $recursive
      */
-    public function changePermissions($path,  $mode = 0777, $recursive = false);
+    public function changePermissions($path,  $mode = 0777);
 
     /**
      * Returns TRUE if the filename exists and is a directory, FALSE otherwise.
@@ -150,4 +149,11 @@ interface FileSystemInterface
      * @return boolean
      */
     public function isFile($path = '/');
+
+    /**
+     * Tells whether the given file is a symbolic link.
+     * @param string $path
+     * @return boolean
+     */
+    public function isLink($path = '/');
 }

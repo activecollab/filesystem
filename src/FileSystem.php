@@ -191,9 +191,9 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function changePermissions($path, $mode = 0777, $recursive = false)
+    public function changePermissions($path, $mode = 0777)
     {
-        return $this->adapter->changePermissions($path, $mode, $recursive);
+        return $this->adapter->changePermissions($path, $mode);
     }
 
     /**
@@ -210,5 +210,13 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     public function isFile($path = '/')
     {
         return $this->adapter->isFile($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLink($path = '/')
+    {
+        return $this->adapter->isLink($path);
     }
 }

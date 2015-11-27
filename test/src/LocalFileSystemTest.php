@@ -386,4 +386,85 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileExists(__DIR__ . '/sandbox/.gitignore');
         $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1');
     }
+
+    /**
+     * Test change dir permission
+     */
+    public function testChangePermission()
+    {
+        $dir = 'subdirectory123';
+        $full_path = __DIR__ . '/sandbox/' . $dir;
+        mkdir($full_path, 0777, true);
+
+        $this->assertTrue(is_writable($full_path));
+        $this->filesystem->changePermissions($dir, 0400);
+
+        clearstatcache();
+
+        $this->assertFalse(is_writable($full_path));
+    }
+
+    /**
+     *
+     * Test change permission on sub dir
+     */
+    public function testChangePermissionRecursive()
+    {
+        $dir = __DIR__ . '/sandbox/';
+        $dir_level1 = $dir . 'subdirectory001';
+        $dir_level2 = $dir_level1 . '/subdirectory002';
+        $dir_level3 = $dir_level2 . '/subdirectory003';
+        $dir_level4 = $dir_level3 . '/subdirectory004';
+
+        mkdir($dir_level4, 0777, true);
+
+        $this->assertTrue(is_writable($dir_level4));
+        $this->filesystem->changePermissions('subdirectory001', 0755);
+
+        clearstatcache();
+
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level1)), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level2)), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level3)), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level4)), -4));
+
+    }
+    /**
+     * Test is dir
+     */
+    public function testIsDir()
+    {
+        $this->assertTrue($this->filesystem->isDir('/'));
+        $this->assertFalse($this->filesystem->isDir('/path/that/not/exists'));
+    }
+
+    /**
+     * Test is file
+     */
+    public function testIsFile()
+    {
+        $file = 'a-file.txt';
+        file_put_contents(__DIR__ . '/sandbox/'.$file, '333');
+        $this->assertFileExists(__DIR__ . '/sandbox/'.$file);
+        $this->assertTrue($this->filesystem->isFile($file));
+        $this->assertFalse($this->filesystem->isFile('not_existing_file.txt'));
+
+    }
+
+    /**
+     * Test is file
+     */
+    public function testIsLink()
+    {
+        file_put_contents(__DIR__ . '/sandbox/a-file.txt', '123');
+        $this->assertFileExists(__DIR__ . '/sandbox/a-file.txt');
+
+        symlink(__DIR__ . '/sandbox/a-file.txt', __DIR__ . '/sandbox/a-new-file.txt');
+
+        $this->assertFileExists(__DIR__ . '/sandbox/a-new-file.txt');
+        $this->assertTrue($this->filesystem->isLink('a-new-file.txt'));
+        $this->assertFalse($this->filesystem->isLink('a-file.txt'));
+    }
+
+
 }
