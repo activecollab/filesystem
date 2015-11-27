@@ -467,7 +467,10 @@ class LocalAdapter extends Adapter
     public function changePermissions($path, $mode = 0777)
     {
         $path = $this->getFullPath($path);
-        return chmod($path, $mode);
+        $old_umask = umask(0);
+        $result = chmod($path, $mode);
+        umask($old_umask);
+        return $result;
     }
 
     /**
