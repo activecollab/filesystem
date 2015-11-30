@@ -168,7 +168,7 @@ class RemoteAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
-    public function changePermissions($path, $mode = 0777)
+    public function changePermissions($path, $mode = 0777, $recursive = false)
     {
     }
 

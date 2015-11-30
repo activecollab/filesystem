@@ -133,8 +133,9 @@ interface FileSystemInterface
      * Attempts to change the mode of the specified file to that given in mode.
      * @param string $path
      * @param int $mode
+     * @param boolean $recursive = false
      */
-    public function changePermissions($path,  $mode = 0777);
+    public function changePermissions($path,  $mode = 0777, $recursive = false);
 
     /**
      * Returns TRUE if the filename exists and is a directory, FALSE otherwise.

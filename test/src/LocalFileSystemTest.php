@@ -392,7 +392,7 @@ class LocalFilesystemTest extends TestCase
      */
     public function testChangePermission()
     {
-        $dir = 'subdirectory123';
+        $dir = 'subdirectory123/';
         $full_path = __DIR__ . '/sandbox/' . $dir;
         mkdir($full_path, 0777, true);
 
@@ -414,12 +414,12 @@ class LocalFilesystemTest extends TestCase
         $dir_level1 = $dir . 'subdirectory001';
         $dir_level2 = $dir_level1 . '/subdirectory002';
         $dir_level3 = $dir_level2 . '/subdirectory003';
-        $dir_level4 = $dir_level3 . '/subdirectory004';
+        $dir_level4 = $dir_level3 . '/subdirectory004/';
 
         mkdir($dir_level4, 0777, true);
 
         $this->assertTrue(is_writable($dir_level4));
-        $this->filesystem->changePermissions('subdirectory001', 0755);
+        $this->filesystem->changePermissions('subdirectory001', 0755, true);
 
         clearstatcache();
 
