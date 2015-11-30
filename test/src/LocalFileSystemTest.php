@@ -416,10 +416,7 @@ class LocalFilesystemTest extends TestCase
         $dir_level3 = $dir_level2 . '/subdirectory003';
         $dir_level4 = $dir_level3 . '/subdirectory004/';
 
-        mkdir($dir_level1, 0777, true);
-        mkdir($dir_level2, 0777, true);
-        mkdir($dir_level3, 0777, true);
-        mkdir($dir_level4, 0777, true);
+        $this->filesystem->createDir($dir_level4, 0777, true);
 
         $this->assertTrue(is_writable($dir_level4));
         $this->filesystem->changePermissions('subdirectory001', 0755, true);
