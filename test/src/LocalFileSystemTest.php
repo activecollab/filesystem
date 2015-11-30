@@ -410,23 +410,19 @@ class LocalFilesystemTest extends TestCase
      */
     public function testChangePermissionRecursive()
     {
-        $dir = __DIR__ . '/sandbox/';
-        $dir_level1 = $dir . 'subdirectory001';
-        $dir_level2 = $dir_level1 . '/subdirectory002';
-        $dir_level3 = $dir_level2 . '/subdirectory003';
-        $dir_level4 = $dir_level3 . '/subdirectory004/';
+        $dir = __DIR__ . '/sandbox';
+        $this->filesystem->createDir('/subdirectory001/subdirectory002/subdirectory003/subdirectory004', 0777, true);
 
-        $this->filesystem->createDir($dir_level4, 0777, true);
-
-        $this->assertTrue(is_writable($dir_level4));
-        $this->filesystem->changePermissions('subdirectory001', 0755, true);
+        $this->assertEquals('0777', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002/subdirectory003/subdirectory004')), -4));
+        $this->assertTrue(is_writable($dir.'/subdirectory001/subdirectory002/subdirectory003/subdirectory004'));
+        $this->filesystem->changePermissions('/subdirectory001', 0755, true);
 
         clearstatcache();
 
-        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level1)), -4));
-        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level2)), -4));
-        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level3)), -4));
-        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir_level4)), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001')), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002')), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002/subdirectory003')), -4));
+        $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002/subdirectory003/subdirectory004')), -4));
 
     }
     /**
