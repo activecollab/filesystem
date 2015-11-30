@@ -478,8 +478,7 @@ class LocalAdapter extends Adapter
      */
     public function isDir($path = '/')
     {
-        $path = $this->getFullPath($path);
-        return is_dir($path);
+        return is_dir($this->getFullPath($path));
     }
 
     /**
@@ -487,8 +486,7 @@ class LocalAdapter extends Adapter
      */
     public function isFile($path = '/')
     {
-        $path = $this->getFullPath($path);
-        return is_file($path);
+        return is_file($this->getFullPath($path));
     }
 
     /**
@@ -496,7 +494,6 @@ class LocalAdapter extends Adapter
      */
     public function isLink($path = '/')
     {
-        $path = $this->getFullPath($path);
-        return is_link($path);
+        return is_link($this->getFullPath($path));
     }
 }
