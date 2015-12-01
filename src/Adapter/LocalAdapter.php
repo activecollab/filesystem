@@ -4,6 +4,7 @@ namespace ActiveCollab\FileSystem\Adapter;
 
 use InvalidArgumentException;
 use RuntimeException;
+use RecursiveIteratorIterator;
 
 /**
  * @package ActiveCollab\FileSystem\Adapter
@@ -459,5 +460,52 @@ class LocalAdapter extends Adapter
         if ($delete_self) {
             rmdir($dir);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function changePermissions($path, $mode = 0777, $recursive = false)
+    {
+        $path = $this->getFullPath($path);
+
+        if ($recursive) {
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+            foreach($iterator as $item) {
+                $old_umask = umask(0);
+                chmod($item, $mode);
+                umask($old_umask);
+            }
+        } else {
+            $old_umask = umask(0);
+            chmod($path, $mode);
+            umask($old_umask);
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDir($path = '/')
+    {
+        return is_dir($this->getFullPath($path));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFile($path = '/')
+    {
+        return is_file($this->getFullPath($path));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLink($path = '/')
+    {
+        return is_link($this->getFullPath($path));
     }
 }
