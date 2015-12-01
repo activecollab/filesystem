@@ -130,7 +130,8 @@ interface FileSystemInterface
     public function getFullPath($path = '/');
 
     /**
-     * Attempts to change the mode of the specified file to that given in mode.
+     * Attempts to change the mode of the specified file to that given in mode
+     * 
      * @param string $path
      * @param int $mode
      * @param boolean $recursive = false

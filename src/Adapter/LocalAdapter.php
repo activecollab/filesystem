@@ -5,6 +5,7 @@ namespace ActiveCollab\FileSystem\Adapter;
 use InvalidArgumentException;
 use RuntimeException;
 use RecursiveIteratorIterator;
+
 /**
  * @package ActiveCollab\FileSystem\Adapter
  */
@@ -468,8 +469,7 @@ class LocalAdapter extends Adapter
     {
         $path = $this->getFullPath($path);
 
-        if($recursive)
-        {
+        if ($recursive) {
             $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
             foreach($iterator as $item) {
                 $old_umask = umask(0);
@@ -481,6 +481,7 @@ class LocalAdapter extends Adapter
             chmod($path, $mode);
             umask($old_umask);
         }
+
         return true;
     }
 
