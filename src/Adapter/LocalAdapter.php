@@ -467,22 +467,17 @@ class LocalAdapter extends Adapter
      */
     public function changePermissions($path, $mode = 0777, $recursive = false)
     {
-        $path = $this->getFullPath($path);
+        $old_umask = umask(0);
 
-        if ($recursive) {
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-            foreach($iterator as $item) {
-                $old_umask = umask(0);
+        if ($this->isDir($path) && $recursive) {
+            foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->getFullPath($path))) as $item) {
                 chmod($item, $mode);
-                umask($old_umask);
             }
         } else {
-            $old_umask = umask(0);
-            chmod($path, $mode);
-            umask($old_umask);
+            chmod($this->getFullPath($path), $mode);
         }
 
-        return true;
+        umask($old_umask);
     }
 
     /**
