@@ -193,5 +193,17 @@ class RemoteAdapter extends Adapter
     {
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function compress($path, array $files)
+    {
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function unCompress($path, $extract_to)
+    {
+    }
 }
