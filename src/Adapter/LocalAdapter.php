@@ -531,7 +531,7 @@ class LocalAdapter extends Adapter
         $command = $this->compress_cmd . $this->getFullPath($path) .' -C '. $this->getFullPath('/') .' '. implode(' ', $files);
         exec($command, $exec_out, $exec_code);
         if ($exec_code !== 0) {
-            throw new RuntimeException('Error on file tar compress restore.');
+            throw new RuntimeException('Error on file tar compress.');
         }
     }
 
@@ -550,7 +550,7 @@ class LocalAdapter extends Adapter
 
         if ($exec_code !== 0) {
             var_dump($exec_out);
-            throw new RuntimeException('Error on file tar un compress restore.');
+            throw new RuntimeException('Error on file tar un compress.');
         }
     }
 }
