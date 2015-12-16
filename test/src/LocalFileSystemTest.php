@@ -495,7 +495,7 @@ class LocalFilesystemTest extends TestCase
     /**
      * Test un compress.
      */
-    public function testUnCompress()
+    public function testUncompress()
     {
         $file = 'file1.txt';
         $compressed_file = 'file.compress.bz2';
@@ -505,7 +505,7 @@ class LocalFilesystemTest extends TestCase
         $this->filesystem->compress($compressed_file, [$file]);
         $this->assertFileExists(__DIR__ . '/sandbox/' . $compressed_file);
         mkdir(__DIR__ . '/sandbox/'.$path_for_extract);
-        $this->filesystem->unCompress($compressed_file, $path_for_extract);
+        $this->filesystem->uncompress($compressed_file, $path_for_extract);
         $this->assertFileExists(__DIR__ . '/sandbox/' . $path_for_extract . '/' . $file);
     }
 
@@ -514,6 +514,6 @@ class LocalFilesystemTest extends TestCase
      */
     public function testUnCompressNotExistingFileException()
     {
-        $this->filesystem->unCompress('not_existing_path.txt.123', 'not_existing_path2.txt');
+        $this->filesystem->uncompress('not_existing_path.txt.123', 'not_existing_path2.txt');
     }
 }

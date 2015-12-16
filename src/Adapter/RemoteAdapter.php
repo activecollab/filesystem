@@ -203,7 +203,7 @@ class RemoteAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
-    public function unCompress($path, $extract_to)
+    public function uncompress($path, $extract_to)
     {
     }
 }

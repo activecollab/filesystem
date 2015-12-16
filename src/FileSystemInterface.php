@@ -169,5 +169,5 @@ interface FileSystemInterface
      * @param string $path
      * @param string $extract_to
      */
-    public function unCompress($path, $extract_to);
+    public function uncompress($path, $extract_to);
 }

@@ -538,7 +538,7 @@ class LocalAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
-    public function unCompress($path, $extract_to)
+    public function uncompress($path, $extract_to)
     {
         $exec_code = 0;
         $exec_out = [];

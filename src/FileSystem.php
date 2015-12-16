@@ -231,8 +231,8 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function unCompress($path, $extract_to)
+    public function uncompress($path, $extract_to)
     {
-        return $this->adapter->unCompress($path, $extract_to);
+        return $this->adapter->uncompress($path, $extract_to);
     }
 }
