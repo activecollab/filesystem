@@ -158,4 +158,16 @@ interface FileSystemInterface
      * @return boolean
      */
     public function isLink($path = '/');
+
+    /**
+     * @param string $path
+     * @param array $files
+     */
+    public function compress($path, array $files);
+
+    /**
+     * @param string $path
+     * @param string $extract_to
+     */
+    public function uncompress($path, $extract_to);
 }
