@@ -4,9 +4,6 @@ namespace ActiveCollab\FileSystem\Adapter;
 
 use Ssh\Session;
 
-/**
- * @package ActiveCollab\FileSystem\Adapter
- */
 class RemoteAdapter extends Adapter
 {
     /**

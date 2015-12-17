@@ -2,9 +2,6 @@
 
 namespace ActiveCollab\FileSystem\Adapter;
 
-/**
- * @package ActiveCollab\FileSystem\Adapter
- */
 interface AdapterInterface
 {
     /**

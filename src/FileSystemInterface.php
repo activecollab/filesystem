@@ -2,9 +2,6 @@
 
 namespace ActiveCollab\FileSystem;
 
-/**
- * @package ActiveCollab\FileSystem
- */
 interface FileSystemInterface
 {
     /**
