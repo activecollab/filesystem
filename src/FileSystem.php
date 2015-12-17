@@ -4,6 +4,9 @@ namespace ActiveCollab\FileSystem;
 
 use ActiveCollab\FileSystem\Adapter\AdapterInterface;
 
+/**
+ * @package ActiveCollab\Filesystem
+ */
 class FileSystem implements FileSystemInterface, AdapterInterface
 {
     /**
