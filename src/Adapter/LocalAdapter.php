@@ -523,12 +523,14 @@ class LocalAdapter extends Adapter
     {
         $exec_code = 0;
         $exec_out = [];
+        $string_files = '';
         foreach ($files as $file) {
             if (!($this->isFile($file) || $this->isDir($file))) {
                 throw new RuntimeException(sprintf('Invalid file path : %s .', $file));
             }
+            $string_files .= ' ' . $this->withoutStartSlash($file);
         }
-        $command = $this->compress_cmd . $this->getFullPath($path) .' -C '. $this->getFullPath('/') .' '. implode(' ', $files);
+        $command = $this->compress_cmd . $this->getFullPath($path) .' -C '. $this->getFullPath('/') . $string_files;
         exec($command, $exec_out, $exec_code);
         if ($exec_code !== 0) {
             throw new RuntimeException('Error on file tar compress.');
