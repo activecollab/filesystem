@@ -6,6 +6,9 @@ use InvalidArgumentException;
 use RuntimeException;
 use RecursiveIteratorIterator;
 
+/**
+ * @package ActiveCollab\FileSystem\Adapter
+ */
 class LocalAdapter extends Adapter
 {
     /**

@@ -4,6 +4,9 @@ namespace ActiveCollab\FileSystem\Adapter;
 
 use InvalidArgumentException;
 
+/**
+ * @package ActiveCollab\FileSystem\Adapter
+ */
 abstract class Adapter implements AdapterInterface
 {
     /**
