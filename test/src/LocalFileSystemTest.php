@@ -6,7 +6,7 @@ use ActiveCollab\FileSystem\FileSystemInterface;
 use ActiveCollab\FileSystem\FileSystem;
 use ActiveCollab\FileSystem\Adapter\LocalAdapter;
 use InvalidArgumentException;
-use SebastianBergmann\GlobalState\RuntimeException;
+use RuntimeException;
 
 /**
  * Class LocalFilesystemTest
