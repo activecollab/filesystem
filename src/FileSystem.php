@@ -7,7 +7,7 @@ use ActiveCollab\FileSystem\Adapter\AdapterInterface;
 /**
  * @package ActiveCollab\Filesystem
  */
-class FileSystem implements FileSystemInterface, AdapterInterface
+class FileSystem implements FileSystemInterface
 {
     /**
      * @var \ActiveCollab\FileSystem\Adapter\AdapterInterface

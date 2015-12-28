@@ -95,5 +95,4 @@ abstract class Adapter implements AdapterInterface
     {
         return substr($path, 0, 1) == '/' ? substr($path, 1) : $path;
     }
-
 }

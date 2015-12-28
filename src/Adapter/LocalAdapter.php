@@ -14,16 +14,14 @@ class LocalAdapter extends Adapter
     /**
      * @var string
      */
-    protected $compress_cmd = 'tar -jcvf ';
+    protected $compress_cmd = 'tar -jcf ';
 
     /**
      * @var string
      */
-    protected $un_compress_cmd = 'tar -jxvf ';
+    protected $un_compress_cmd = 'tar -jxf ';
 
     /**
-     * Construct a new instance of local file system
-     *
      * @param string|null $sandbox_path
      */
     public function __construct($sandbox_path)
@@ -32,12 +30,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * List all files that are in the given path
-     *
-     * @param  string $path
-     * @param  boolean $include_hidden
-     * @return array
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function files($path = '/', $include_hidden = true)
     {
@@ -108,11 +101,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * List all subdirs that are in the given path
-     *
-     * @param  string $path
-     * @return array
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function subdirs($path = '/')
     {
@@ -136,13 +125,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Return the folder list in subfolders from $dir
-     *
-     * This function ignores hidden folders!
-     *
-     * @param  string $dir
-     * @param  boolean $recursive
-     * @return array
+     * {@inheritdoc}
      */
     private function subdirsWithFullPaths($dir, $recursive = false)
     {
@@ -172,13 +155,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Create a link between $source and $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param  string $source
-     * @param  string $target
-     * @throws RuntimeException
+     * {@inheritdoc}
      */
     public function link($source, $target)
     {
@@ -194,13 +171,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Create a new file with the given data and optionally chmod it
-     *
-     * @param  string $path
-     * @param  string $data
-     * @param  integer|null $mode
-     * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * {@inheritdoc}
      */
     public function createFile($path, $data, $mode = null)
     {
@@ -222,12 +193,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Write to a file. If file does not exist it will be created
-     *
-     * @param  string $path
-     * @param  string $data
-     * @param  integer|null $mode
-     * @throws RuntimeException
+     * {@inheritdoc}
      */
     public function writeFile($path, $data, $mode = null)
     {
@@ -249,10 +215,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Replace values in a text file
-     *
-     * @param string $path
-     * @param array $search_and_replace
+     * {@inheritdoc}
      */
     public function replaceInFile($path, array $search_and_replace)
     {
@@ -270,13 +233,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Copy $source file to $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param string $source
-     * @param string $target
-     * @param integer|null $mode
+     * {@inheritdoc}
      */
     public function copyFile($source, $target, $mode = null)
     {
@@ -298,12 +255,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Create a new directory
-     *
-     * @param  string $path
-     * @param  int $mode
-     * @param  boolean $recursive
-     * @return boolean
+     * {@inheritdoc}
      */
     public function createDir($path, $mode = 0777, $recursive = true)
     {
@@ -321,14 +273,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Copy a directory content from $source to $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param  string $source
-     * @param  string $target
-     * @param  bool|false $empty_target
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function copyDir($source, $target, $empty_target = false)
     {
@@ -374,11 +319,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Remove a directory
-     *
-     * @param  string $path
-     * @param  array $exclude
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function emptyDir($path = '/', array $exclude = [])
     {
@@ -398,9 +339,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Remove a file
-     *
-     * @param string $path
+     * {@inheritdoc}
      */
     public function delete($path = '/')
     {
@@ -418,10 +357,7 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Remove a directory
-     *
-     * @param  string $path
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function deleteDir($path = '/')
     {
@@ -521,17 +457,23 @@ class LocalAdapter extends Adapter
      */
     public function compress($path, array $files)
     {
+        if (empty($files)) {
+            $escaped_file_names = '';
+        } else {
+            $escaped_file_names = ' ' . implode(' ', array_map(function($file) {
+                if ($this->isFile($file) || $this->isDir($file)) {
+                    return escapeshellarg($this->withoutStartSlash($file));
+                } else {
+                    throw new RuntimeException(sprintf("Invalid file path '$file'"));
+                }
+            }, $files));
+        }
+
         $exec_code = 0;
         $exec_out = [];
-        $string_files = '';
-        foreach ($files as $file) {
-            if (!($this->isFile($file) || $this->isDir($file))) {
-                throw new RuntimeException(sprintf('Invalid file path : %s .', $file));
-            }
-            $string_files .= ' ' . $this->withoutStartSlash($file);
-        }
-        $command = $this->compress_cmd . $this->getFullPath($path) .' -C '. $this->getFullPath('/') . $string_files;
-        exec($command, $exec_out, $exec_code);
+
+        exec($this->compress_cmd . escapeshellarg($this->getFullPath($path)) .' -C '. $this->getFullPath('/') . $escaped_file_names, $exec_out, $exec_code);
+
         if ($exec_code !== 0) {
             throw new RuntimeException('Error on file tar compress.');
         }
@@ -542,17 +484,17 @@ class LocalAdapter extends Adapter
      */
     public function uncompress($path, $extract_to)
     {
+        if (!$this->isFile($path)) {
+            throw new RuntimeException(sprintf("Invalid file path '$path'"));
+        }
+
         $exec_code = 0;
         $exec_out = [];
-        if (!$this->isFile($path)) {
-            throw new RuntimeException(sprintf('Invalid file path : %s .', $path));
-        }
-        $command = $this->un_compress_cmd . ' ' . $this->getFullPath($path) . ' -C ' . $this->getFullPath($extract_to);
-        exec($command, $exec_out, $exec_code);
+
+        exec($this->un_compress_cmd . ' ' . escapeshellarg($this->getFullPath($path)) . ' -C ' . escapeshellarg($this->getFullPath($extract_to)), $exec_out, $exec_code);
 
         if ($exec_code !== 0) {
-            var_dump($exec_out);
-            throw new RuntimeException('Error on file tar un compress.');
+            throw new RuntimeException('Error on file tar uncompress');
         }
     }
 }
