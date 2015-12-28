@@ -6,6 +6,7 @@ use ActiveCollab\FileSystem\FileSystemInterface;
 use ActiveCollab\FileSystem\FileSystem;
 use ActiveCollab\FileSystem\Adapter\LocalAdapter;
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Class LocalFilesystemTest
@@ -462,5 +463,57 @@ class LocalFilesystemTest extends TestCase
         $this->assertFalse($this->filesystem->isLink('a-file.txt'));
     }
 
+    /**
+     * Test compress 2 files and one dir.
+     */
+    public function testCompress()
+    {
+        $file = 'file1.txt';
+        $file2 = 'file2.txt';
+        $file3 = 'file3.txt';
+        $dir = 'sub_dir_compress';
+        $compressed_file = 'file.compress.bz2';
+        file_put_contents(__DIR__ . '/sandbox/'.$file, '1111');
+        $this->assertFileExists(__DIR__ . '/sandbox/'.$file);
+        file_put_contents(__DIR__ . '/sandbox/'.$file2, '2222');
+        $this->assertFileExists(__DIR__ . '/sandbox/'.$file2);
+        mkdir(__DIR__ . '/sandbox/'.$dir);
+        file_put_contents(__DIR__ . '/sandbox/' . $dir . '/' . $file3, '3333');
+        $this->assertFileExists(__DIR__ . '/sandbox/' . $dir . '/' . $file3);
+        $this->filesystem->compress($compressed_file, [$file, $file2, $dir]);
+        $this->assertFileExists(__DIR__ . '/sandbox/' . $compressed_file);
+    }
 
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testCompressNotExistingFileException()
+    {
+        $this->filesystem->compress('file.bz2', ['not_existing_path.txt']);
+    }
+
+    /**
+     * Test un compress.
+     */
+    public function testUncompress()
+    {
+        $file = 'file1.txt';
+        $compressed_file = 'file.compress.bz2';
+        $path_for_extract = '/unzip_files/';
+        file_put_contents(__DIR__ . '/sandbox/'.$file, '1111');
+        $this->assertFileExists(__DIR__ . '/sandbox/'.$file);
+        $this->filesystem->compress($compressed_file, [$file]);
+        $this->assertFileExists(__DIR__ . '/sandbox/' . $compressed_file);
+        mkdir(__DIR__ . '/sandbox/'.$path_for_extract);
+        $this->filesystem->uncompress($compressed_file, $path_for_extract);
+        $this->assertFileExists(__DIR__ . '/sandbox/' . $path_for_extract . '/' . $file);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testUnCompressNotExistingFileException()
+    {
+        $this->filesystem->uncompress('not_existing_path.txt.123', 'not_existing_path2.txt');
+    }
 }

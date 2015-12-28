@@ -84,4 +84,16 @@ abstract class Adapter implements AdapterInterface
     {
         return substr($path, strlen($path) - 1) == '/' ? $path : $path . '/';
     }
+
+    /**
+     * Return path without start slash
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function withoutStartSlash($path)
+    {
+        return substr($path, 0, 1) == '/' ? substr($path, 1) : $path;
+    }
+
 }

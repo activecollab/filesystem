@@ -237,4 +237,20 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     {
         return $this->adapter->isLink($path);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compress($path, array $files)
+    {
+        return $this->adapter->compress($path, $files);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function uncompress($path, $extract_to)
+    {
+        return $this->adapter->uncompress($path, $extract_to);
+    }
 }
