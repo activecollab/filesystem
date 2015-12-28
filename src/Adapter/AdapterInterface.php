@@ -8,6 +8,21 @@ namespace ActiveCollab\FileSystem\Adapter;
 interface AdapterInterface
 {
     /**
+     * Return sandbox path
+     *
+     * @return string
+     */
+    public function getSandboxPath();
+
+    /**
+     * Set sandbox path
+     *
+     * @param  string $sandbox_path
+     * @return $this
+     */
+    public function &setSandboxPath($sandbox_path);
+
+    /**
      * List all files that are in the given path
      *
      * @param  string  $path

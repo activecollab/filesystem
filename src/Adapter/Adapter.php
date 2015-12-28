@@ -20,9 +20,7 @@ abstract class Adapter implements AdapterInterface
     private $sandbox_path_length;
 
     /**
-     * Return sandbox path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getSandboxPath()
     {
@@ -30,10 +28,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Set sandbox path
-     *
-     * @param  string $sandbox_path
-     * @return $this
+     * {@inheritdoc}
      */
     public function &setSandboxPath($sandbox_path)
     {

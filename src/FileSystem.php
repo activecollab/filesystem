@@ -35,6 +35,24 @@ class FileSystem implements FileSystemInterface, AdapterInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSandboxPath()
+    {
+        return $this->adapter->getSandboxPath();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &setSandboxPath($sandbox_path)
+    {
+        $this->adapter->setSandboxPath($sandbox_path);
+
+        return $this;
+    }
+
+    /**
      * List all files that are in the given path
      *
      * @param  string  $path
