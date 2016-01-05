@@ -138,20 +138,16 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Remove a file
-     *
-     * @param string $path
+     * {@inheritdoc}
      */
-    public function delete($path = '/')
+    public function delete($path = '/', $check_path_exists = false)
     {
     }
 
     /**
-     * Remove a directory
-     *
-     * @param string $path
+     * {@inheritdoc}
      */
-    public function deleteDir($path = '/')
+    public function deleteDir($path = '/', $check_path_exists = false)
     {
     }
 

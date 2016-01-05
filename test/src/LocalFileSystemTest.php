@@ -146,11 +146,21 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
+     * Check if delete dir is silent by defualt, when file does not exist
+     */
+    public function testDeleteDirIsSilentByDefault()
+    {
+        $this->assertFalse($this->filesystem->isDir('/this-does-not-exist-for-sure'));
+        $this->filesystem->deleteDir('/this-does-not-exist-for-sure');
+    }
+
+    /**
      * @expectedException InvalidArgumentException
      */
     public function testDeleteExceptionWhenTryingToDeleteANonExistingFile()
     {
-        $this->filesystem->deleteDir('file-that-does-not-exist.txt');
+        $this->assertFalse($this->filesystem->isDir('/this-does-not-exist-for-sure'));
+        $this->filesystem->deleteDir('/this-does-not-exist-for-sure', true);
     }
 
     /**

@@ -119,15 +119,17 @@ interface AdapterInterface
      * Remove a file.
      *
      * @param string $path
+     * @param bool   $check_path_exists
      */
-    public function delete($path = '/');
+    public function delete($path = '/', $check_path_exists = false);
 
     /**
      * Remove a directory.
      *
      * @param string $path
+     * @param bool   $check_path_exists
      */
-    public function deleteDir($path = '/');
+    public function deleteDir($path = '/', $check_path_exists = false);
 
     /**
      * Return full path from sanbox path and $path.

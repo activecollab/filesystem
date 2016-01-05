@@ -341,31 +341,31 @@ class LocalAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
-    public function delete($path = '/')
+    public function delete($path = '/', $check_path_exists = false)
     {
         $full_path = $this->getFullPath($path);
 
         if (is_link($full_path) && is_file(readlink($full_path))) {
             unlink($full_path);
-        } else {
-            if (!is_link($full_path) && is_file($full_path)) {
-                unlink($full_path);
-            } else {
-                throw new InvalidArgumentException('$path is not a file (or link to a file)');
-            }
+        } elseif (!is_link($full_path) && is_file($full_path)) {
+            unlink($full_path);
+        } elseif(is_dir($full_path) || (is_link($full_path) && is_dir(readlink($full_path)))) {
+            throw new InvalidArgumentException('$path is not a directory (or link to a directory)');
+        } elseif ($check_path_exists) {
+            throw new InvalidArgumentException('$path is not a file (or link to a file)');
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deleteDir($path = '/')
+    public function deleteDir($path = '/', $check_path_exists = false)
     {
         $dir_path = $this->getFullPath($path);
 
         if (is_dir($dir_path)) {
             $this->deleteDirByFullPath($dir_path);
-        } else {
+        } elseif ($check_path_exists) {
             throw new InvalidArgumentException('$path is not a directory');
         }
     }
