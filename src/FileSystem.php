@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem;
 
 use ActiveCollab\FileSystem\Adapter\AdapterInterface;
@@ -15,7 +24,7 @@ class FileSystem implements FileSystemInterface
     private $adapter;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AdapterInterface $adapter
      */
@@ -25,7 +34,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Return user Adapter instance
+     * Return user Adapter instance.
      *
      * @return \ActiveCollab\FileSystem\Adapter\AdapterInterface
      */
@@ -53,22 +62,15 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * List all files that are in the given path
-     *
-     * @param  string  $path
-     * @param  boolean $include_hidden
-     * @return array
+     * {@inheritdoc}
      */
-    function files($path = '/', $include_hidden = true)
+    public function files($path = '/', $include_hidden = true)
     {
         return $this->adapter->files($path, $include_hidden);
     }
 
     /**
-     * List all subdirs that are in the given path
-     *
-     * @param  string $path
-     * @return array
+     * {@inheritdoc}
      */
     public function subdirs($path = '/')
     {
@@ -76,12 +78,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Create a link between $source and $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param string $source
-     * @param string $target
+     * {@inheritdoc}
      */
     public function link($source, $target)
     {
@@ -89,11 +86,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Create a new file with the given data and optionally chmod it
-     *
-     * @param string       $path
-     * @param string       $data
-     * @param integer|null $mode
+     * {@inheritdoc}
      */
     public function createFile($path, $data, $mode = null)
     {
@@ -101,11 +94,15 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Write to a file. If file does not exist it will be created
-     *
-     * @param  string       $path
-     * @param  string       $data
-     * @param  integer|null $mode
+     * {@inheritdoc}
+     */
+    public function readFile($path)
+    {
+        return $this->adapter->readFile($path);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function writeFile($path, $data, $mode = null)
     {
@@ -113,10 +110,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Replace values in a text file
-     *
-     * @param string $path
-     * @param array  $search_and_replace
+     * {@inheritdoc}
      */
     public function replaceInFile($path, array $search_and_replace)
     {
@@ -124,13 +118,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Copy $source file to $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param string       $source
-     * @param string       $target
-     * @param integer|null $mode
+     * {@inheritdoc}
      */
     public function copyFile($source, $target, $mode = null)
     {
@@ -138,12 +126,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Create a new directory
-     *
-     * @param  string  $path
-     * @param  int     $mode
-     * @param  boolean $recursive
-     * @return boolean
+     * {@inheritdoc}
      */
     public function createDir($path, $mode = 0777, $recursive = true)
     {
@@ -151,13 +134,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Copy a directory content from $source to $target
-     *
-     * Note: Source needs to be absolute path, not relative to sanbox
-     *
-     * @param string     $source
-     * @param string     $target
-     * @param bool|false $empty_target
+     * {@inheritdoc}
      */
     public function copyDir($source, $target, $empty_target = false)
     {
@@ -165,10 +142,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Remove a directory
-     *
-     * @param string $path
-     * @param array  $exclude
+     * {@inheritdoc}
      */
     public function emptyDir($path = '/', array $exclude = [])
     {
@@ -192,10 +166,7 @@ class FileSystem implements FileSystemInterface
     }
 
     /**
-     * Return full path from sanbox path and $path
-     *
-     * @param  string $path
-     * @return string
+     * {@inheritdoc}
      */
     public function getFullPath($path = '/')
     {

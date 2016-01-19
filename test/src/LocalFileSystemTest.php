@@ -1,17 +1,26 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem\Test;
 
-use ActiveCollab\FileSystem\FileSystemInterface;
-use ActiveCollab\FileSystem\FileSystem;
 use ActiveCollab\FileSystem\Adapter\LocalAdapter;
+use ActiveCollab\FileSystem\FileSystem;
+use ActiveCollab\FileSystem\FileSystemInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Class LocalFilesystemTest
+ * Class LocalFilesystemTest.
  */
-class LocalFilesystemTest extends TestCase
+class LocalFileSystemTest extends TestCase
 {
     /**
      * @var FileSystemInterface
@@ -19,7 +28,7 @@ class LocalFilesystemTest extends TestCase
     private $filesystem;
 
     /**
-     * Set up test environment
+     * Set up test environment.
      */
     public function setUp()
     {
@@ -29,7 +38,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Tear down test environment
+     * Tear down test environment.
      */
     public function tearDown()
     {
@@ -41,7 +50,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Check if we properly set local adapter
+     * Check if we properly set local adapter.
      */
     public function testAdapterIsLocal()
     {
@@ -53,7 +62,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test if getFullPath is working correctly
+     * Test if getFullPath is working correctly.
      */
     public function testFullPath()
     {
@@ -100,7 +109,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test subdirs
+     * Test subdirs.
      */
     public function testSubdirs()
     {
@@ -114,7 +123,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test if files are properly deleted
+     * Test if files are properly deleted.
      */
     public function testDeleteAFile()
     {
@@ -126,7 +135,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test if linked files are properly unlinked
+     * Test if linked files are properly unlinked.
      */
     public function testDeleteALinkToAFile()
     {
@@ -146,7 +155,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Check if delete dir is silent by defualt, when file does not exist
+     * Check if delete dir is silent by defualt, when file does not exist.
      */
     public function testDeleteDirIsSilentByDefault()
     {
@@ -191,7 +200,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test create a new file
+     * Test create a new file.
      */
     public function testCreateFile()
     {
@@ -213,7 +222,41 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test if write file creates a file it is missing
+     * Test if file content can be read.
+     */
+    public function testReadFile()
+    {
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+
+        $this->filesystem->writeFile('file-to-be-created.txt', 'File content', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->assertEquals('File content', $this->filesystem->readFile('file-to-be-created.txt'));
+    }
+
+    /**
+     * Test read file with an empty value.
+     */
+    public function testReadFileWithAnEmptyValue()
+    {
+        $this->assertEmpty('0');
+
+        $this->assertFileNotExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+
+        $this->filesystem->writeFile('file-to-be-created.txt', '0', 0777);
+        $this->assertFileExists(__DIR__ . '/sandbox/file-to-be-created.txt');
+        $this->assertEquals('0', $this->filesystem->readFile('file-to-be-created.txt'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testReadFileExceptionOnMissingFile()
+    {
+        $this->filesystem->readFile('file-to-be-created.txt');
+    }
+
+    /**
+     * Test if write file creates a file it is missing.
      */
     public function testWriteFileCreatesAMissingFile()
     {
@@ -225,7 +268,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test if write file updates a file
+     * Test if write file updates a file.
      */
     public function testWriteFileUpdatesAnExistingFile()
     {
@@ -241,7 +284,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test replace in file
+     * Test replace in file.
      */
     public function testReplaceInFile()
     {
@@ -257,7 +300,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test copy file
+     * Test copy file.
      */
     public function testCopyFile()
     {
@@ -273,7 +316,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test link file
+     * Test link file.
      */
     public function testLinkFile()
     {
@@ -288,7 +331,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test directory creation
+     * Test directory creation.
      */
     public function testCreateDir()
     {
@@ -298,7 +341,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test copy directory
+     * Test copy directory.
      */
     public function testCopyDir()
     {
@@ -340,7 +383,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test empty directory
+     * Test empty directory.
      */
     public function testEmptyDir()
     {
@@ -371,7 +414,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test recursive directory delete
+     * Test recursive directory delete.
      */
     public function testDeleteDir()
     {
@@ -399,7 +442,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test change dir permission
+     * Test change dir permission.
      */
     public function testChangePermission()
     {
@@ -416,8 +459,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     *
-     * Test change permission on sub dir
+     * Test change permission on sub dir.
      */
     public function testChangePermissionRecursive()
     {
@@ -434,10 +476,9 @@ class LocalFilesystemTest extends TestCase
         $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002')), -4));
         $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002/subdirectory003')), -4));
         $this->assertEquals('0755', substr(sprintf('%o', fileperms($dir.'/subdirectory001/subdirectory002/subdirectory003/subdirectory004')), -4));
-
     }
     /**
-     * Test is dir
+     * Test is dir.
      */
     public function testIsDir()
     {
@@ -446,7 +487,7 @@ class LocalFilesystemTest extends TestCase
     }
 
     /**
-     * Test is file
+     * Test is file.
      */
     public function testIsFile()
     {
@@ -455,11 +496,10 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileExists(__DIR__ . '/sandbox/'.$file);
         $this->assertTrue($this->filesystem->isFile($file));
         $this->assertFalse($this->filesystem->isFile('not_existing_file.txt'));
-
     }
 
     /**
-     * Test is file
+     * Test is file.
      */
     public function testIsLink()
     {

@@ -195,6 +195,31 @@ class LocalAdapter extends Adapter
     /**
      * {@inheritdoc}
      */
+    public function readFile($path)
+    {
+        $file_path = $this->getFullPath($path);
+
+        if (is_file($file_path)) {
+            if (is_readable($file_path)) {
+                $content = file_get_contents($file_path);
+
+                if ($content !== false) {
+                    return $content;
+                } else {
+                    throw new RuntimeException("Failed to read $path file");
+                }
+            } else {
+                throw new RuntimeException("File $path is not readable");
+            }
+
+        } else {
+            throw new InvalidArgumentException("File $path does not exist");
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function writeFile($path, $data, $mode = null)
     {
         $file_path = $this->getFullPath($path);

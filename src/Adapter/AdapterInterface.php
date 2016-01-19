@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem\Adapter;
 
 /**
@@ -25,8 +34,8 @@ interface AdapterInterface
     /**
      * List all files that are in the given path.
      *
-     * @param  string  $path
-     * @param  boolean $include_hidden
+     * @param  string $path
+     * @param  bool   $include_hidden
      * @return array
      */
     public function files($path = '/', $include_hidden = true);
@@ -52,18 +61,26 @@ interface AdapterInterface
     /**
      * Create a new file with the given data and optionally chmod it.
      *
-     * @param  string       $path
-     * @param  string       $data
-     * @param  integer|null $mode
+     * @param string   $path
+     * @param string   $data
+     * @param int|null $mode
      */
     public function createFile($path, $data, $mode = null);
 
     /**
+     * Return file contents.
+     *
+     * @param  string $path
+     * @return string
+     */
+    public function readFile($path);
+
+    /**
      * Write to a file. If file does not exist it will be created.
      *
-     * @param  string       $path
-     * @param  string       $data
-     * @param  integer|null $mode
+     * @param string   $path
+     * @param string   $data
+     * @param int|null $mode
      */
     public function writeFile($path, $data, $mode = null);
 
@@ -80,19 +97,19 @@ interface AdapterInterface
      *
      * Note: Source needs to be absolute path, not relative to sanbox
      *
-     * @param string       $source
-     * @param string       $target
-     * @param integer|null $mode
+     * @param string   $source
+     * @param string   $target
+     * @param int|null $mode
      */
     public function copyFile($source, $target, $mode = null);
 
     /**
      * Create a new directory.
      *
-     * @param  string  $path
-     * @param  integer $mode
-     * @param  boolean $recursive
-     * @return boolean
+     * @param  string $path
+     * @param  int    $mode
+     * @param  bool   $recursive
+     * @return bool
      */
     public function createDir($path, $mode = 0777, $recursive = true);
 
@@ -142,38 +159,38 @@ interface AdapterInterface
     /**
      * Attempts to change the mode of the specified file to that given in mode.
      *
-     * @param string  $path
-     * @param int     $mode
-     * @param boolean $recursive = false
+     * @param string $path
+     * @param int    $mode
+     * @param bool   $recursive = false
      */
     public function changePermissions($path, $mode = 0777, $recursive = false);
 
     /**
      * Returns TRUE if the filename exists and is a directory, FALSE otherwise.
      *
-     * @param  string  $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function isDir($path = '/');
 
     /**
      * Tells whether the given file is a regular file.
      *
-     * @param  string  $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function isFile($path = '/');
 
     /**
      * Tells whether the given file is a symbolic link.
      *
-     * @param  string  $path
-     * @return boolean
+     * @param  string $path
+     * @return bool
      */
     public function isLink($path = '/');
 
     /**
-     * Compress content to an archive
+     * Compress content to an archive.
      *
      * @param string $path
      * @param array  $files
@@ -181,7 +198,7 @@ interface AdapterInterface
     public function compress($path, array $files);
 
     /**
-     * Extract an archive to a given location
+     * Extract an archive to a given location.
      *
      * @param string $path
      * @param string $extract_to
