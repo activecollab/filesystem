@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem\Adapter;
 
 use Ssh\Session;
@@ -25,10 +34,10 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * List all files that are in the given path
+     * List all files that are in the given path.
      *
-     * @param  string  $path
-     * @param  boolean $include_hidden
+     * @param  string $path
+     * @param  bool   $include_hidden
      * @return array
      */
     public function files($path = '/', $include_hidden = true)
@@ -36,7 +45,7 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * List all subdirs that are in the given path
+     * List all subdirs that are in the given path.
      *
      * @param  string $path
      * @return array
@@ -46,7 +55,7 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Create a link between $source and $target
+     * Create a link between $source and $target.
      *
      * Note: Source needs to be absolute path, not relative to sanbox
      *
@@ -58,29 +67,29 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Create a new file with the given data and optionally chmod it
+     * Create a new file with the given data and optionally chmod it.
      *
-     * @param  string       $path
-     * @param  string       $data
-     * @param  integer|null $mode
+     * @param string   $path
+     * @param string   $data
+     * @param int|null $mode
      */
     public function createFile($path, $data, $mode = null)
     {
     }
 
     /**
-     * Write to a file. If file does not exist it will be created
+     * Write to a file. If file does not exist it will be created.
      *
-     * @param  string       $path
-     * @param  string       $data
-     * @param  integer|null $mode
+     * @param string   $path
+     * @param string   $data
+     * @param int|null $mode
      */
     public function writeFile($path, $data, $mode = null)
     {
     }
 
     /**
-     * Replace values in a text file
+     * Replace values in a text file.
      *
      * @param string $path
      * @param array  $search_and_replace
@@ -90,32 +99,32 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Copy $source file to $target
+     * Copy $source file to $target.
      *
      * Note: Source needs to be absolute path, not relative to sanbox
      *
-     * @param string       $source
-     * @param string       $target
-     * @param integer|null $mode
+     * @param string   $source
+     * @param string   $target
+     * @param int|null $mode
      */
     public function copyFile($source, $target, $mode = null)
     {
     }
 
     /**
-     * Create a new directory
+     * Create a new directory.
      *
-     * @param  string  $path
-     * @param  integer $mode
-     * @param  boolean $recursive
-     * @return boolean
+     * @param  string $path
+     * @param  int    $mode
+     * @param  bool   $recursive
+     * @return bool
      */
     public function createDir($path, $mode = 0777, $recursive = true)
     {
     }
 
     /**
-     * Copy a directory content from $source to $target
+     * Copy a directory content from $source to $target.
      *
      * Note: Source needs to be absolute path, not relative to sanbox
      *
@@ -128,7 +137,7 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Remove a directory
+     * Remove a directory.
      *
      * @param string $path
      * @param array  $exclude
@@ -152,7 +161,7 @@ class RemoteAdapter extends Adapter
     }
 
     /**
-     * Return full path from sanbox path and $path
+     * Return full path from sanbox path and $path.
      *
      * @param  string $path
      * @return string

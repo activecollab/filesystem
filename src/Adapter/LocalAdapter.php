@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem\Adapter;
 
 use InvalidArgumentException;
 use RuntimeException;
-use RecursiveIteratorIterator;
 
 /**
  * @package ActiveCollab\FileSystem\Adapter
@@ -54,13 +62,13 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Return a list of files from a directory
+     * Return a list of files from a directory.
      *
      * This function ignores hidden folders!
      *
      * @param  string $dir
-     * @param  boolean $include_hidden
-     * @param  boolean $recursive
+     * @param  bool   $include_hidden
+     * @param  bool   $recursive
      * @return array
      */
     private function filesWithFullPaths($dir, $include_hidden = true, $recursive = false)
@@ -211,7 +219,6 @@ class LocalAdapter extends Adapter
             } else {
                 throw new RuntimeException("File $path is not readable");
             }
-
         } else {
             throw new InvalidArgumentException("File $path does not exist");
         }
@@ -374,7 +381,7 @@ class LocalAdapter extends Adapter
             unlink($full_path);
         } elseif (!is_link($full_path) && is_file($full_path)) {
             unlink($full_path);
-        } elseif(is_dir($full_path) || (is_link($full_path) && is_dir(readlink($full_path)))) {
+        } elseif (is_dir($full_path) || (is_link($full_path) && is_dir(readlink($full_path)))) {
             throw new InvalidArgumentException('$path is not a directory (or link to a directory)');
         } elseif ($check_path_exists) {
             throw new InvalidArgumentException('$path is not a file (or link to a file)');
@@ -396,11 +403,11 @@ class LocalAdapter extends Adapter
     }
 
     /**
-     * Delete directory by full path
+     * Delete directory by full path.
      *
      * @param string $path
-     * @param boolean $delete_self
-     * @param array $exclude
+     * @param bool   $delete_self
+     * @param array  $exclude
      */
     private function deleteDirByFullPath($path, $delete_self = true, array $exclude = [])
     {
@@ -485,7 +492,7 @@ class LocalAdapter extends Adapter
         if (empty($files)) {
             $escaped_file_names = '';
         } else {
-            $escaped_file_names = ' ' . implode(' ', array_map(function($file) {
+            $escaped_file_names = ' ' . implode(' ', array_map(function ($file) {
                 if ($this->isFile($file) || $this->isDir($file)) {
                     return escapeshellarg($this->withoutStartSlash($file));
                 } else {

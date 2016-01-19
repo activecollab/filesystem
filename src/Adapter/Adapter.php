@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Active Collab File System.
+ *
+ * (c) A51 doo <info@activecollab.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ActiveCollab\FileSystem\Adapter;
 
 use InvalidArgumentException;
@@ -15,7 +24,7 @@ abstract class Adapter implements AdapterInterface
     private $sandbox_path;
 
     /**
-     * @var integer
+     * @var int
      */
     private $sandbox_path_length;
 
@@ -39,7 +48,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Return sandbox path length
+     * Return sandbox path length.
      *
      * @return int
      */
@@ -49,7 +58,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Convert relative path to full path
+     * Convert relative path to full path.
      *
      * @param  string                   $path
      * @return string
@@ -75,7 +84,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Return path with trailing slash
+     * Return path with trailing slash.
      *
      * @param  string $path
      * @return string
@@ -86,7 +95,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Return path without start slash
+     * Return path without start slash.
      *
      * @param  string $path
      * @return string
