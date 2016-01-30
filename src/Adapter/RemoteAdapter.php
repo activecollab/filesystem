@@ -78,6 +78,13 @@ class RemoteAdapter extends Adapter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function readFile($path)
+    {
+    }
+
+    /**
      * Write to a file. If file does not exist it will be created.
      *
      * @param string   $path
