@@ -359,8 +359,10 @@ class LocalAdapter extends Adapter
 
         if (is_dir($dir_path)) {
             if (count($exclude)) {
+                $exclude_path_prefix = rtrim($path, '/');
+
                 foreach ($exclude as $k => $v) {
-                    $exclude[$k] = $this->getFullPath($v);
+                    $exclude[$k] = $this->getFullPath($exclude_path_prefix . '/' . ltrim($v, '/'));
                 }
             }
 

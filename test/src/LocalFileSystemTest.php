@@ -413,6 +413,25 @@ class LocalFileSystemTest extends TestCase
         $this->assertFileNotExists(__DIR__ . '/sandbox/.hidden');
     }
 
+    public function testEmptyDirExcludeIsRelativeToDirPath()
+    {
+        mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
+
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/b-file.txt', '123');
+        file_put_contents(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/c-file.txt', '123');
+
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/b-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/c-file.txt');
+
+        $this->filesystem->emptyDir('/subdirectory1/subsubdirectory1', ['a-file.txt', '/c-file.txt']);
+
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/a-file.txt');
+        $this->assertFileNotExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/b-file.txt');
+        $this->assertFileExists(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1/c-file.txt');
+    }
+
     /**
      * Test recursive directory delete.
      */
