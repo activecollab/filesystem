@@ -413,6 +413,9 @@ class LocalFileSystemTest extends TestCase
         $this->assertFileNotExists(__DIR__ . '/sandbox/.hidden');
     }
 
+    /**
+     * Confirm that exclude paths are lative to the path that's being emptied.
+     */
     public function testEmptyDirExcludeIsRelativeToDirPath()
     {
         mkdir(__DIR__ . '/sandbox/subdirectory1/subsubdirectory1', 0777, true);
