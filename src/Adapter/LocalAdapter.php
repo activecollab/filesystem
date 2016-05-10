@@ -349,7 +349,7 @@ class LocalAdapter extends Adapter
             $new_dir_path = dirname($dir_path) . '/' . $new_name;
 
             if (file_exists($new_dir_path)) {
-                throw new RuntimeException("Failed to rename $dir_path to $new_name, $new_name exists");
+                throw new RuntimeException("Failed to rename $path to $new_name, $new_name exists");
             }
 
             if (dirname($dir_path) != dirname($new_dir_path)) {
@@ -357,7 +357,7 @@ class LocalAdapter extends Adapter
             }
 
             if (!rename($dir_path, $new_dir_path)) {
-                throw new RuntimeException("Failed to rename $dir_path to $new_name, operation failed");
+                throw new RuntimeException("Failed to rename $path to $new_name, operation failed");
             }
         } else {
             throw new InvalidArgumentException("Directory $path does not exist");

@@ -107,7 +107,7 @@ class RenameTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed to rename /Users/ilija/Projects/Components/Filesystem/test/src/sandbox/subdir to subdir2, subdir2 exists
+     * @expectedExceptionMessage Failed to rename subdir to subdir2, subdir2 exists
      */
     public function testRenameDirToAnExistingDir()
     {
