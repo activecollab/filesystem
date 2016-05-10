@@ -11,9 +11,39 @@
 
 namespace ActiveCollab\FileSystem\Test;
 
+use ActiveCollab\FileSystem\Adapter\LocalAdapter;
+use ActiveCollab\FileSystem\FileSystem;
+use ActiveCollab\FileSystem\FileSystemInterface;
+
 /**
  * @package ActiveCollab\Memories\Test
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FileSystemInterface
+     */
+    protected $filesystem;
+
+    /**
+     * Set up test environment.
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->filesystem = new FileSystem(new LocalAdapter(__DIR__ . '/sandbox'));
+    }
+
+    /**
+     * Tear down test environment.
+     */
+    public function tearDown()
+    {
+        $this->filesystem->emptyDir('/', ['.gitignore']);
+
+        $this->assertEquals([], $this->filesystem->subdirs());
+
+        parent::tearDown();
+    }
 }

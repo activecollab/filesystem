@@ -260,7 +260,37 @@ class LocalAdapter extends Adapter
                 throw new RuntimeException("Failed to write to $path");
             }
         } else {
-            throw new InvalidArgumentException("File $path already exists");
+            throw new InvalidArgumentException("File $path does not exist");
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function renameFile($path, $new_name)
+    {
+        if (empty($new_name)) {
+            throw new InvalidArgumentException('New file name is required');
+        }
+
+        $file_path = $this->getFullPath($path);
+
+        if (is_file($file_path)) {
+            $new_file_path = dirname($file_path) . '/' . $new_name;
+
+            if (file_exists($new_file_path)) {
+                throw new RuntimeException("Failed to rename $path to $new_name, $new_name already exists");
+            }
+
+            if (dirname($file_path) != dirname($new_file_path)) {
+                throw new RuntimeException("Rename option can't be used to move file to a different directory");
+            }
+
+            if (!rename($file_path, $new_file_path)) {
+                throw new RuntimeException("Failed to rename $path to $new_name");
+            }
+        } else {
+            throw new InvalidArgumentException("File $path does not exist");
         }
     }
 
@@ -302,6 +332,36 @@ class LocalAdapter extends Adapter
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function renameDir($path, $new_name)
+    {
+        if (empty($new_name)) {
+            throw new InvalidArgumentException('New directory name is required');
+        }
+
+        $dir_path = $this->getFullPath($path);
+
+        if (is_dir($dir_path)) {
+            $new_dir_path = dirname($dir_path) . '/' . $new_name;
+
+            if (file_exists($new_dir_path)) {
+                throw new RuntimeException("Failed to rename $dir_path to $new_name, $new_name exists");
+            }
+
+            if (dirname($dir_path) != dirname($new_dir_path)) {
+                throw new RuntimeException("Rename option can't be used to move a directory to a different directory");
+            }
+
+            if (!rename($dir_path, $new_dir_path)) {
+                throw new RuntimeException("Failed to rename $dir_path to $new_name, operation failed");
+            }
+        } else {
+            throw new InvalidArgumentException("Directory $path does not exist");
+        }
     }
 
     /**

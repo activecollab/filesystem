@@ -93,6 +93,17 @@ interface AdapterInterface
     public function replaceInFile($path, array $search_and_replace);
 
     /**
+     * Rename a file.
+     *
+     * Rename is done in the same directory. It can't be used to move a file to a different directory.
+     *
+     * @param  string $path
+     * @param  string $new_name
+     * @return bool
+     */
+    public function renameFile($path, $new_name);
+
+    /**
      * Copy $source file to $target.
      *
      * Note: Source needs to be absolute path, not relative to sanbox
@@ -112,6 +123,17 @@ interface AdapterInterface
      * @return bool
      */
     public function createDir($path, $mode = 0777, $recursive = true);
+
+    /**
+     * Rename a directory.
+     *
+     * Rename is done in the same directory. It can't be used to move a directory.
+     *
+     * @param  string $path
+     * @param  string $new_name
+     * @return bool
+     */
+    public function renameDir($path, $new_name);
 
     /**
      * Copy a directory content from $source to $target.

@@ -120,6 +120,14 @@ class FileSystem implements FileSystemInterface
     /**
      * {@inheritdoc}
      */
+    public function renameFile($path, $new_name)
+    {
+        $this->adapter->renameFile($path, $new_name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function copyFile($source, $target, $mode = null)
     {
         $this->adapter->copyFile($source, $target, $mode);
@@ -131,6 +139,14 @@ class FileSystem implements FileSystemInterface
     public function createDir($path, $mode = 0777, $recursive = true)
     {
         return $this->adapter->createDir($path, $mode, $recursive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function renameDir($path, $new_name)
+    {
+        $this->adapter->renameDir($path, $new_name);
     }
 
     /**

@@ -11,9 +11,6 @@
 
 namespace ActiveCollab\FileSystem\Test;
 
-use ActiveCollab\FileSystem\Adapter\LocalAdapter;
-use ActiveCollab\FileSystem\FileSystem;
-use ActiveCollab\FileSystem\FileSystemInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -22,33 +19,6 @@ use RuntimeException;
  */
 class LocalFileSystemTest extends TestCase
 {
-    /**
-     * @var FileSystemInterface
-     */
-    private $filesystem;
-
-    /**
-     * Set up test environment.
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->filesystem = new FileSystem(new LocalAdapter(__DIR__ . '/sandbox'));
-    }
-
-    /**
-     * Tear down test environment.
-     */
-    public function tearDown()
-    {
-        $this->filesystem->emptyDir('/', ['.gitignore']);
-
-        $this->assertEquals([], $this->filesystem->subdirs());
-
-        parent::tearDown();
-    }
-
     /**
      * Check if we properly set local adapter.
      */
